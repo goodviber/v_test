@@ -19,16 +19,16 @@ task :run do
   item1 = Product.new('001', 'Very Cheap Chair', 9.25)
   item2 = Product.new('002', 'Little Table', 45.00)
   item3 = Product.new('003', 'Funky Light', 19.95)
-  item4 = Product.new('001', 'Very Cheap Chair', 9.25)
 
-  puts "first run"
+
+  puts "first basket"
 
   co = Checkout.new(promo_rules)
   puts "scanning"
   co.scan(item1)
   co.scan(item2)
   co.scan(item3)
-  co.scan(item4)
+
 
   puts co.total
 end

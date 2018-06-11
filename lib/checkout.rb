@@ -1,8 +1,10 @@
 class Checkout
   attr_reader :promo_rules
+  attr_reader :discount_manager
   attr_accessor :basket
 
   def initialize(promo_rules = [])
+    @dicount_manager = DiscountManager.new(promo_rules)
     @promo_rules = promo_rules
     @basket = []
   end
@@ -12,16 +14,12 @@ class Checkout
   end
 
   def total
-    multi_discount_price = 0
+    price = 0
     puts basket
     basket.each do |product|
-      promo_rules.each do |promo_rule|
-        if promo_rule.type == PromoRule::TYPE[:multi_discount]
-          multi_discount_price = promo_rule.apply(product.code, quantity_in_basket(product.code))
-        end
-      end
+      price += product.price
     end
-    multi_discount_price
+    price.round(2)
   end
 
   def quantity_in_basket(code)
