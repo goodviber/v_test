@@ -15,9 +15,9 @@ describe PromoRule do
    it 'should be instance of PromoRule' do
      expect(subject).to be_a_kind_of(PromoRule)
    end
- end
+  end
 
- describe 'creating discount_promo_rule processor' do
+  describe 'creating discount_promo_rule processor' do
     it 'should call block with no arguments' do
       value = false
       promo_rule = PromoRule.new(PromoRule::TYPE[:discount]) do
@@ -26,11 +26,11 @@ describe PromoRule do
       expect(promo_rule.apply).to be_truthy
     end
 
-    it 'should not call block with one argument' do
+    it 'should call block with one argument' do
       promo_rule = PromoRule.new(PromoRule::TYPE[:discount]) do |value|
         value
       end
-      expect(promo_rule.apply('foo')).not_to eq('foo')
+      expect(promo_rule.apply('foo')).to eq('foo')
     end
 
     it 'should call block with two arguments' do
@@ -40,13 +40,64 @@ describe PromoRule do
       expect(promo_rule.apply('foo', 'bar')).to eq('foo-bar')
     end
 
-    it 'should not call block with three arguments' do
+    it 'should call block with three arguments' do
       promo_rule = PromoRule.new(PromoRule::TYPE[:discount]) do |value1, value2, value3|
         "#{value1}-#{value2}-#{value3}"
       end
-      expect(promo_rule.apply('foo', 'bar', 'baz')).to eq('foo-bar-baz')
+      expect(promo_rule.apply('foo', 'bar', 'baz')).not_to eq('foo-bar-baz')
+    end
+  end
+
+  describe 'multi_discount method' do
+    subject { PromoRule.multi_discount_rule('001', 10, 5.00) }
+
+    it 'should be instance of PromoRule' do
+      expect(subject).to be_a_kind_of(PromoRule)
     end
 
+    it 'should calculate discount when count is equal' do
+      discount = subject.apply('001', 10)
+      expect(discount).to eq(5.00)
+    end
+
+    it 'should calculate discount when count is more than' do
+      discount = subject.apply('001', 11)
+      expect(discount).to eq(5.00)
+    end
+
+    it 'should not discount when count is less' do
+      discount = subject.apply('001', 9)
+      expect(discount).to be_nil
+    end
+
+    it 'should not discount when product code is different' do
+      discount = subject.apply('002', 10)
+      expect(discount).to be_nil
+    end
   end
+
+  describe 'discount method' do
+    subject { PromoRule.discount_rule(60, 10) }
+
+    it 'should be instance of PromoRule' do
+      expect(subject).to be_a_kind_of(PromoRule)
+    end
+
+    it 'should calculate discount when count is equal' do
+      discounted = subject.apply(60)
+      expect(discounted).to eq(54)
+    end
+
+    it 'should calculate discount when count is more than' do
+      discounted = subject.apply(61)
+      expect(discounted).to eq(54.9)
+    end
+
+    it 'should not discount when count is less than' do
+      discounted = subject.apply(59)
+      expect(discounted).to eq(59)
+    end
+  end
+
 
 end
