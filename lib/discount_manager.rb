@@ -7,14 +7,14 @@ class DiscountManager
   end
 
   def discount_price_for(product, quantity)
-    discount_price = 0
+    discount_price = nil
 
     promo_rules.each do |promo_rule|
-      if promo_rule.type == PromoRule::TYPE[:multibuy_discount] #multi_discount
+      if promo_rule.type == 2 #multi_discount
         discount_price = promo_rule.apply(product.code, quantity)
       end
     end
-    discount_price == 0 ? product.price : discount_price
+    discount_price == nil ? product.price : discount_price
   end
 
   def discount_total(total)

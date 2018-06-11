@@ -4,8 +4,8 @@ class PromoRule
   TYPE = { discount: 1, multi_discount: 2 }
 
   def initialize(type, &block)
-    @type   = type
-    @block  = block
+    @type = type
+    @block = block
   end
 
   def apply(*args)
@@ -24,7 +24,7 @@ class PromoRule
       if sum_total >= minimum_spend
         sum_total.round(2) - sum_total.round(2)*percentage_discount/100
       else
-        sum_total
+        sum_total.round(2)
       end
     end
   end

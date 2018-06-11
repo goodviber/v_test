@@ -7,19 +7,19 @@ describe DiscountManager do
 
   describe '#discount_price_for' do
     before do
-      allow(promo_rule).to receive(:type) { PromoRule::TYPE[:multibuy_discount] }
+      allow(promo_rule).to receive(:type) { PromoRule::TYPE[:multi_discount] }
       allow(promo_rule).to receive(:apply) { 60 }
     end
 
     it 'should pass the calculation to the promo_rule with params' do
-      expect(promo_rule).to receive(:type) { PromoRule::TYPE[:multibuy_discount] }
+      expect(promo_rule).to receive(:type) { PromoRule::TYPE[:multi_discount] }
       expect(promo_rule).to receive(:apply).with(product.code, 2)
 
       subject.discount_price_for(product, 2)
     end
 
     it 'should return the discounted price when rule applied' do
-      price = subject.discount_price_for(product, 1)
+      price = subject.discount_price_for(product, 2)
       expect(price).to eq(60)
     end
 

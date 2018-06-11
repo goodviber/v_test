@@ -4,7 +4,7 @@ class Checkout
   attr_accessor :basket
 
   def initialize(promo_rules = [])
-    @dicount_manager = DiscountManager.new(promo_rules)
+    @discount_manager = DiscountManager.new(promo_rules)
     @promo_rules = promo_rules
     @basket = []
   end
@@ -17,9 +17,12 @@ class Checkout
     price = 0
     puts basket
     basket.each do |product|
-      price += product.price
+      product_quantity = quantity_in_basket(product.code)
+      price += discount_manager.discount_price_for(product, quantity_in_basket(product.code))
     end
-    price.round(2)
+
+    result = discount_manager.discount_total(price)
+    result.round(2)
   end
 
   def quantity_in_basket(code)
