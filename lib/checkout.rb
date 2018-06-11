@@ -1,15 +1,22 @@
 class Checkout
+  attr_reader :promo_rules
+  attr_accessor :basket
 
-  attr_reader :promotional_rules
-  attr_accessor :cart
-
-  def initialize(promotional_rules = [])
-    @promotional_rules = promotional_rules
-    @cart = cart
+  def initialize(promo_rules = [])
+    @promo_rules = promo_rules
+    @basket = []
   end
 
   def scan(item)
-    cart << item
+    basket << item
   end
-  
+
+  def total
+    price = 0
+    basket.each do |product|
+      price += product.price
+    end
+    price
+  end
+
 end
