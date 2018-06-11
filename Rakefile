@@ -20,44 +20,29 @@ task :run do
   item2 = Product.new('002', 'Little Table', 45.00)
   item3 = Product.new('003', 'Funky Light', 19.95)
 
-  puts "discount for method"
-
-  dm = DiscountManager.new(promo_rules)
-  price = dm.discount_price_for(item1, 3)
-  puts price
-  puts PromoRule::TYPE[:multi_discount]
-  dm.promo_rules.each do |pr|
-
-    if pr.type == PromoRule::TYPE[:multi_discount]
-      puts "apply", pr.apply('001', 2)
-    end
-  end
-
-  co = Checkout.new(promo_rules)
-  co.scan(item1)
-  co.scan(item1)
-  puts co.total
-
+  puts "scanning items 1,2,3"
   co = Checkout.new(promo_rules)
   co.scan(item1)
   co.scan(item2)
   co.scan(item3)
 
-  puts co.total
+  puts "Cost: #{co.total}"
 
+  puts "scanning items 1,3,1"
   co = Checkout.new(promo_rules)
   co.scan(item1)
   co.scan(item3)
   co.scan(item1)
 
-  puts co.total
+  puts "Cost: #{co.total}"
 
+  puts "scanning items 1,2,1,3"
   co = Checkout.new(promo_rules)
   co.scan(item1)
   co.scan(item2)
   co.scan(item1)
   co.scan(item3)
 
-  puts co.total
+  puts "Cost: #{co.total}"
 
 end

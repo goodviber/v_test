@@ -15,7 +15,6 @@ class Checkout
 
   def total
     price = 0
-    puts basket
     basket.each do |product|
       product_quantity = quantity_in_basket(product.code)
       price += discount_manager.discount_price_for(product, quantity_in_basket(product.code))
